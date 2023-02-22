@@ -1,5 +1,6 @@
 package com.example.myflixsterapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,9 +19,11 @@ import com.google.gson.reflect.TypeToken
 import okhttp3.Headers
 import org.json.JSONObject
 
+private const val TAG = "FlixsterMovieFragment"
+
 private const val API_KEY = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
 
-class FlixsterMovieFragment: Fragment() {
+class FlixsterMovieFragment: Fragment(), OnListFragmentInteractListener {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,7 +49,7 @@ class FlixsterMovieFragment: Fragment() {
         params["api_key"] = API_KEY
 
         client[
-                "https://api.themoviedb.org/3/movie/now_playing",
+                "https://api.themoviedb.org/3/tv/popular",
                 params,
                 object: JsonHttpResponseHandler()
                 {
@@ -62,7 +65,7 @@ class FlixsterMovieFragment: Fragment() {
                         val arrayMovie = object: TypeToken<List<FlixsterMovie>>() {}.type
 
                         val models : List<FlixsterMovie> = gson.fromJson(resultsJSON, arrayMovie)
-                        recyclerView.adapter = FlixsterMovieRecyclerViewAdapter(models)
+                        recyclerView.adapter = FlixsterMovieRecyclerViewAdapter(models, this@FlixsterMovieFragment)
 
                         Log.d("FlixsterMovieFragment", "response successful")
                     }
@@ -77,5 +80,15 @@ class FlixsterMovieFragment: Fragment() {
 
                 }
         ]
+    }
+    override fun onItemClick(item: FlixsterMovie)
+    {
+        val intent = Intent(context, DetailActivity::class.java)
+        intent.putExtra("tvShowTitle", item.title)
+        intent.putExtra("tvShowPic", item.movieImageUrl)
+        intent.putExtra("tvShowDesc", item.description)
+        intent.putExtra("tvShowAirDate", item.airDate)
+        intent.putExtra("tvShowPop", item.popular)
+        context?.startActivity(intent)
     }
 }

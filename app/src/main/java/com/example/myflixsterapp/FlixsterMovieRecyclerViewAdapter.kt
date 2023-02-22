@@ -1,5 +1,7 @@
 package com.example.myflixsterapp
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,13 +10,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-class FlixsterMovieRecyclerViewAdapter(private val movie: List<FlixsterMovie>)
+private const val TAG = "FlixsterMovieRecyclerViewAdapter"
+
+class FlixsterMovieRecyclerViewAdapter(private val movie: List<FlixsterMovie>, private val mListener: OnListFragmentInteractListener?)
     : RecyclerView.Adapter<FlixsterMovieRecyclerViewAdapter.MovieViewHolder>()
 {
-    inner class MovieViewHolder(val mView: View): RecyclerView.ViewHolder(mView) {
+    inner class MovieViewHolder(val mView: View): RecyclerView.ViewHolder(mView){
         var mItem: FlixsterMovie? = null
         val filmTitle: TextView = mView.findViewById<View>(R.id.movieTitle) as TextView
-        val filmDesc: TextView = mView.findViewById<View>(R.id.movieDesc) as TextView
         val filmImage: ImageView = mView.findViewById<View>(R.id.moviePic) as ImageView
 
     }
@@ -34,10 +37,14 @@ class FlixsterMovieRecyclerViewAdapter(private val movie: List<FlixsterMovie>)
 
         holder.mItem = movies
         holder.filmTitle.text = movies.title
-        holder.filmDesc.text = movies.description
 
         Glide.with(holder.mView).load(picUrl).centerInside().into(holder.filmImage)
 
+        holder.mView.setOnClickListener {
+            holder.mItem?.let { movies ->
+                mListener?.onItemClick(movies)
+            }
+        }
     }
 
 }
