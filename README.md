@@ -62,7 +62,7 @@ finding where in my code to put the beginning part of the link, it worked smooth
 
 Submitted by: Bret Seelall
 
-MyFlixsterApp is a tv browsing app that allows users to browse the most popular tv shows currently showing.
+MyFlixsterApp is a tv show browsing app that allows users to browse the most popular tv shows currently showing.
 
 Time spent: ~20 hours spent in total
 
